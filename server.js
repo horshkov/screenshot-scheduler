@@ -78,19 +78,24 @@ async function takeScreenshot() {
       });
     }
 
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
 
     // Handle cookie consent popup
     try {
       console.log('Checking for cookie consent popup...');
-      const consentButton = await page.getByText('Consent', { exact: false }).first();
-      if (consentButton) {
-        await consentButton.click({ timeout: 3000 });
-        console.log('✓ Clicked Consent button');
-        await page.waitForTimeout(1000);
-      }
+
+      // Wait for the consent button to appear and be visible
+      const consentButton = page.locator('button:has-text("Consent")').first();
+      await consentButton.waitFor({ state: 'visible', timeout: 5000 });
+
+      console.log('Found consent button, clicking...');
+      await consentButton.click({ force: true });
+      console.log('✓ Clicked Consent button');
+
+      // Wait for modal to disappear
+      await page.waitForTimeout(2000);
     } catch (error) {
-      console.log('No consent popup found or already dismissed');
+      console.log('No consent popup found or already dismissed:', error.message);
     }
 
     // Switch to English
@@ -278,19 +283,24 @@ async function takeScreenshotAtExactTime(targetDate) {
       });
     }
 
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
 
     // Handle cookie consent popup
     try {
       console.log('[EXACT-TIME] Checking for cookie consent popup...');
-      const consentButton = await page.getByText('Consent', { exact: false }).first();
-      if (consentButton) {
-        await consentButton.click({ timeout: 3000 });
-        console.log('[EXACT-TIME] ✓ Clicked Consent button');
-        await page.waitForTimeout(1000);
-      }
+
+      // Wait for the consent button to appear and be visible
+      const consentButton = page.locator('button:has-text("Consent")').first();
+      await consentButton.waitFor({ state: 'visible', timeout: 5000 });
+
+      console.log('[EXACT-TIME] Found consent button, clicking...');
+      await consentButton.click({ force: true });
+      console.log('[EXACT-TIME] ✓ Clicked Consent button');
+
+      // Wait for modal to disappear
+      await page.waitForTimeout(2000);
     } catch (error) {
-      console.log('[EXACT-TIME] No consent popup found or already dismissed');
+      console.log('[EXACT-TIME] No consent popup found or already dismissed:', error.message);
     }
 
     // Switch to English
