@@ -80,6 +80,19 @@ async function takeScreenshot() {
 
     await page.waitForTimeout(2000);
 
+    // Handle cookie consent popup
+    try {
+      console.log('Checking for cookie consent popup...');
+      const consentButton = await page.getByText('Consent', { exact: false }).first();
+      if (consentButton) {
+        await consentButton.click({ timeout: 3000 });
+        console.log('✓ Clicked Consent button');
+        await page.waitForTimeout(1000);
+      }
+    } catch (error) {
+      console.log('No consent popup found or already dismissed');
+    }
+
     // Switch to English
     try {
       console.log('Switching to English language...');
@@ -267,6 +280,19 @@ async function takeScreenshotAtExactTime(targetDate) {
 
     await page.waitForTimeout(2000);
 
+    // Handle cookie consent popup
+    try {
+      console.log('[EXACT-TIME] Checking for cookie consent popup...');
+      const consentButton = await page.getByText('Consent', { exact: false }).first();
+      if (consentButton) {
+        await consentButton.click({ timeout: 3000 });
+        console.log('[EXACT-TIME] ✓ Clicked Consent button');
+        await page.waitForTimeout(1000);
+      }
+    } catch (error) {
+      console.log('[EXACT-TIME] No consent popup found or already dismissed');
+    }
+
     // Switch to English
     try {
       const krDropdown = await page.$('text=KR');
@@ -319,20 +345,7 @@ async function takeScreenshotAtExactTime(targetDate) {
       await page.waitForTimeout(1000);
     }
 
-    // NOW WAIT FOR EXACT TARGET TIME
-    const now = new Date();
-    const msUntilTarget = targetDate - now;
-
-    if (msUntilTarget > 0) {
-      console.log(`[EXACT-TIME] Page ready! Waiting ${msUntilTarget}ms for exact target time...`);
-      await new Promise(resolve => setTimeout(resolve, msUntilTarget));
-    }
-
-    // CAPTURE AT EXACT TIME
-    const captureTime = new Date();
-    console.log(`[EXACT-TIME] Capturing NOW at ${captureTime.toISOString()}`);
-
-    // Add timestamp overlay
+    // Prepare timestamp overlay BEFORE waiting (using exact targetDate)
     await page.evaluate((timeData) => {
       const year = timeData.year;
       const month = (timeData.month + 1).toString().padStart(2, '0');
@@ -368,16 +381,28 @@ async function takeScreenshotAtExactTime(targetDate) {
       `;
       document.body.appendChild(overlay);
     }, {
-      month: captureTime.getMonth(),
-      day: captureTime.getDate(),
-      year: captureTime.getFullYear(),
-      hours: captureTime.getHours(),
-      minutes: captureTime.getMinutes(),
-      seconds: captureTime.getSeconds(),
+      month: targetDate.getMonth(),
+      day: targetDate.getDate(),
+      year: targetDate.getFullYear(),
+      hours: targetDate.getHours(),
+      minutes: targetDate.getMinutes(),
+      seconds: targetDate.getSeconds(),
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
     });
 
-    await page.waitForTimeout(300);
+    console.log('[EXACT-TIME] ✓ Timestamp overlay prepared');
+
+    // NOW WAIT FOR EXACT TARGET TIME
+    const now = new Date();
+    const msUntilTarget = targetDate - now;
+
+    if (msUntilTarget > 0) {
+      console.log(`[EXACT-TIME] Waiting ${msUntilTarget}ms for exact target time...`);
+      await new Promise(resolve => setTimeout(resolve, msUntilTarget));
+    }
+
+    // CAPTURE AT EXACT TIME (minimal delay)
+    console.log(`[EXACT-TIME] Capturing NOW at ${new Date().toISOString()}`);
 
     // Generate filename
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
