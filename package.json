@@ -1,0 +1,26 @@
+{
+  "name": "screenshot-scheduler",
+  "version": "1.0.0",
+  "description": "A service that takes screenshots of websites at scheduled times",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node index.js --test",
+    "ui": "node server.js",
+    "postinstall": "npx playwright install chromium --with-deps"
+  },
+  "keywords": [
+    "screenshot",
+    "scheduler",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "node-schedule": "^2.1.1",
+    "playwright": "^1.40.0"
+  }
+}

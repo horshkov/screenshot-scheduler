@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screenshot Scheduler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📸 Screenshot Scheduler</h1>
+      <p>Schedule screenshots of kimpga.com at exact times</p>
+    </header>
+
+    <main>
+      <!-- Schedule Screenshot Section -->
+      <section class="card">
+        <h2>Schedule New Screenshot</h2>
+
+        <div class="info-box">
+          <strong>Current Time:</strong> <span id="currentTime">Loading...</span>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="form-group">
+          <label for="time">Time:</label>
+          <input type="time" id="time" step="1" required>
+          <small class="help-text">24-hour format (e.g., 14:30:00 = 2:30 PM)</small>
+        </div>
+
+        <div class="form-group">
+          <label for="timezone">Timezone:</label>
+          <select id="timezone">
+            <option value="Asia/Hong_Kong">Hong Kong (Asia/Hong_Kong)</option>
+            <option value="America/New_York">New York (America/New_York)</option>
+            <option value="America/Los_Angeles">Los Angeles (America/Los_Angeles)</option>
+            <option value="Europe/London">London (Europe/London)</option>
+            <option value="Europe/Paris">Paris (Europe/Paris)</option>
+            <option value="Asia/Tokyo">Tokyo (Asia/Tokyo)</option>
+            <option value="Asia/Shanghai">Shanghai (Asia/Shanghai)</option>
+            <option value="Australia/Sydney">Sydney (Australia/Sydney)</option>
+            <option value="UTC">UTC</option>
+          </select>
+        </div>
+
+        <div class="button-group">
+          <button id="scheduleBtn" class="btn btn-primary">Schedule Screenshot</button>
+          <button id="nowBtn" class="btn btn-secondary">Take Screenshot Now</button>
+        </div>
+
+        <div id="scheduleMessage" class="message"></div>
+      </section>
+
+      <!-- Scheduled Jobs Section -->
+      <section class="card">
+        <h2>Scheduled Jobs</h2>
+        <div id="jobsContainer">
+          <p class="empty-state">No scheduled jobs</p>
+        </div>
+        <button id="refreshJobsBtn" class="btn btn-secondary">Refresh Jobs</button>
+      </section>
+
+      <!-- Recent Screenshots Section -->
+      <section class="card">
+        <h2>Recent Screenshots</h2>
+        <div id="screenshotsContainer">
+          <p class="empty-state">No screenshots yet</p>
+        </div>
+        <button id="refreshScreenshotsBtn" class="btn btn-secondary">Refresh Screenshots</button>
+      </section>
+    </main>
+
+    <footer>
+      <p>Screenshot Scheduler UI - Powered by Playwright</p>
+    </footer>
+  </div>
+
+  <!-- Screenshot Modal -->
+  <div id="screenshotModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="modalTitle">Screenshot</h2>
+      <div class="modal-body">
+        <img id="modalImage" src="" alt="Screenshot">
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
