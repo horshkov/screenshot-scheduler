@@ -594,6 +594,27 @@ app.get('/api/screenshot/:filename', (req, res) => {
   }
 });
 
+/**
+ * GET /api/screenshot/:filename/download - Download screenshot (forces download)
+ */
+app.get('/api/screenshot/:filename/download', (req, res) => {
+  try {
+    const { filename } = req.params;
+    const filepath = join(config.screenshotPath, filename);
+
+    if (!fs.existsSync(filepath)) {
+      return res.status(404).json({ error: 'Screenshot not found' });
+    }
+
+    // Set Content-Disposition header to force download
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Type', 'image/png');
+    res.sendFile(filepath);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log('='.repeat(60));

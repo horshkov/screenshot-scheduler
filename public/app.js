@@ -288,6 +288,7 @@ async function loadScreenshots() {
             </div>
             <div class="screenshot-actions">
               <button class="btn btn-secondary" onclick="openScreenshot('${screenshot.filename}')">Open</button>
+              <a href="${API_BASE}/api/screenshot/${encodeURIComponent(screenshot.filename)}/download" class="btn btn-primary" download>Download</a>
             </div>
           </div>
         `;
@@ -306,6 +307,7 @@ function openScreenshot(filename) {
   const modal = document.getElementById('screenshotModal');
   const modalImage = document.getElementById('modalImage');
   const modalTitle = document.getElementById('modalTitle');
+  const modalDownload = document.getElementById('modalDownload');
 
   if (!modal || !modalImage || !modalTitle) {
     console.error('Modal elements not found');
@@ -314,6 +316,12 @@ function openScreenshot(filename) {
 
   modalTitle.textContent = filename;
   modalImage.src = `${API_BASE}/api/screenshot/${encodeURIComponent(filename)}`;
+
+  if (modalDownload) {
+    modalDownload.href = `${API_BASE}/api/screenshot/${encodeURIComponent(filename)}/download`;
+    modalDownload.download = filename;
+  }
+
   modal.style.display = 'block';
   console.log('Modal opened');
 }

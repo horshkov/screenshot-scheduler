@@ -221,6 +221,12 @@ main {
   gap: 10px;
 }
 
+.screenshot-actions a.btn {
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
 footer {
   text-align: center;
   color: white;
@@ -299,6 +305,16 @@ footer {
   height: auto;
   border-radius: 8px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.modal-actions a.btn {
+  text-decoration: none;
+  display: inline-block;
 }
 
 @media (max-width: 768px) {
